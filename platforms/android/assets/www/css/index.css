@@ -41,15 +41,22 @@ body {
 
 }
 
+#deviceready{
+    position:fixed;
+    top: 0px;
+    left: 0px;
+
+}
+
 /* Landscape layout (with min-width) */
 
 .event {
-    border-radius:4px;
-    -webkit-border-radius:4px;
+
     color:#FFFFFF;
     font-size:12px;
-    margin:0px 30px;
-    padding:2px 0px;
+    display: block;
+    width: 20px;
+    height: 20px;
 }
 
 .event.listening {

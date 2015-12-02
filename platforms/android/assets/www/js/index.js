@@ -55,21 +55,24 @@ var app = {
         var options = { frequency: 10 };
         var hh = (window.innerHeight/2);
         var hw = (window.innerWidth/2);
-        var partY = hh / 10;
-        var partX = hw / 180;
-        var cubeX = 0;
+        var partY = hh / Math.PI;
+        var partX = hw / Math.PI;
+        var startDegree = 0;
+        var x, y;
 
         watchID = navigator.accelerometer.watchAcceleration(function(acceleration){
-            var y = (acceleration.z * partY)+hh;
+            y = (acceleration.z.toFixed(4) * partY)+hh;
             cube.position.setY( y );
         }, function(){
 
         }, options);
 
+        navigator.compass.getCurrentHeading(function(heading){
+            startDegree = heading.trueHeading;
+        }, function(){});
         navigator.compass.watchHeading(function(heading){
-            var x = ( heading.trueHeading / 2 ) * partX;
-
-            console.log(heading);
+            x = ( heading.trueHeading - startDegree) * (Math.PI / 180);
+            x = (x * partX)*-1;
             cube.position.setX( x );
         }, function(){}, { frequency: 10});
 
@@ -78,6 +81,9 @@ var app = {
             socket.on('hand', function (data) {
                 //cube.rotation.x += 0.01;
                 cube.rotation.y += data.yaw;
+                if( data.pitch > 0.5){
+                    cube.position.setZ(cube.position.z + (data.direction[0]*-1) );
+                }
             });
         });
     }
